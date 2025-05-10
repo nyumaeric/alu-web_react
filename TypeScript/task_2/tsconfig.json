@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+      "outDir": "./dist/",
+      "noImplicitAny": true,
+      "module": "es6", // Or "commonjs" if you prefer for Webpack
+      "target": "es5",
+      "jsx": "react", // If you plan to use React, otherwise remove
+      "allowJs": true,
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true
+    },
+    "include": [
+      "./js/**/*.ts" // Include all .ts files in the js subdirectory
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+  }
