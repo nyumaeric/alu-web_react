@@ -1,23 +1,23 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import NotificationItem from './NotificationItem';
-import { StyleSheetTestUtils } from 'aphrodite';
 
-describe("Testing <NotificationItem />", () => {
-  let  wrapper;
-  
-  beforeEach(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
-  });
+describe('<NotificationItem />', () => {
+    it('renders an <NotificationItems /> component', () => {
+        const wrapper = shallow(<NotificationItem />);
+        expect(wrapper).toHaveLength(1);
+    });
 
-  it("<NotificationItem /> renders without crashing", () => {
-    wrapper = shallow(<NotificationItem />);
-    expect(wrapper.exists());
-  });
+    it('renders an <NotificationItem /> component with type and value', () => {
+        const wrapper = shallow(<NotificationItem type="default" value="test" />);
+        expect(wrapper.props()[ 'data-notification-type' ]).toEqual('default');
+        expect(wrapper.text()).toEqual('test');
+        expect(wrapper.html()).toContain('<li data-notification-type="default"');
+        expect(wrapper.html()).toContain('test</li>');
+    });
 
-  it("<NotificationItem />  renders the correct html by passing dummy type and value props,", () => {
-    wrapper = shallow(<NotificationItem type="default" value="test" />);
-    expect(wrapper.find("li").text()).toBe("test");
-    expect(wrapper.find("li").prop("data-notification-type")).toBe("default");
-  });
+    it('renders an <NotificationItem /> component checking for html pass through', () => {
+        const wrapper = shallow(<NotificationItem html={ { __html: '<u>test</u>' } } />);
+        expect(wrapper.html()).toContain('<u>test</u>');
+    });
 });

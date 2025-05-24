@@ -1,90 +1,68 @@
 import React from 'react';
-import './Notifications.css';
-import { getLatestNotification } from '../utils/utils';
-import closeIcon from '../assets/close-icon.png';
+import { shallow } from 'enzyme';
+import Notifications from './Notifications';
 import NotificationItem from './NotificationItem';
-import PropeTypes from 'prop-types';
-import NotificationItemShape from './NotificationItemShape';
+import { getLatestNotification } from '../utils/utils';
 
-class Notifications extends React.Component {
-  constructor(props) {
-    super(props);
-    this.markAsRead = this.markAsRead.bind(this);
-  }
+const htmlObj = getLatestNotification();
 
-  markAsRead(id) {
-    console.log(`Notification ${id} has been marked as read`);
-  }
+const listNotifications = [
+    { id: 1, type: 'default', value: 'New course available' },
+    { id: 2, type: 'urgent', value: 'New resume available' },
+    { id: 3, type: 'urgent', html: htmlObj },
+];
 
-  render() {
-    return (
-      <>
-        <div className='menuItem'>
-          Your notifications
-        </div>
-        {this.props.displayDrawer? 
-            <div className="Notifications">
-              <button style={{
-                color: '#3a3a3a',
-                fontWeight: 'bold',
-                background: 'none',
-                border: 'none',
-                fontSize: '15px',
-                position: 'absolute',
-                right: '3px',
-                top: '3px',
-                cursor: 'pointer',
-                outline: 'none',
-              }}
-              aria-label="Close"
-              onClick={(e) => {
-                console.log('Close button has been clicked');
-              }}
-              >
-                <img src={closeIcon} alt="close icon" width="15px" />
-              </button>
-              {
-                this.props.listNotifications.length != 0 ?
-                  <p>Here is the list of notifications</p>
-                : null
-              }
-              <ul>
-                {
-                  this.props.listNotifications.length == 0 ?
-                    <NotificationItem type="default" value="No new notification for now" />
-                  : null
-                }
-                {
-                  this.props.listNotifications.map((val, idx)=> {
-                    return <NotificationItem
-                    type={val.type}
-                    value={val.value}
-                    html={val.html}
-                    key={val.id}
-                    markAsRead={this.markAsRead}
-                    id={val.id}
-                  />
-                  })
-                }
-              </ul>
-            </div>
-          :
-            null
-        }
-        
-      </>
-    );
-  }
-}
+describe('<Notifications />', () => {
+    it('renders an <Notifications /> component', () => {
+        const wrapper = shallow(<Notifications />);
+        expect(wrapper).toHaveLength(1);
+    });
 
-Notifications.defaultProps = {
-  displayDrawer: false,
-  listNotifications: []
-};
+    it('does display the menuItem when displayDrawer is false', () => {
+        const wrapper = shallow(<Notifications displayDrawer={ false } />);
+        expect(wrapper.find('.menuItem')).toHaveLength(1);
+    });
 
-Notifications.propTypes = {
-  displayDrawer: PropeTypes.bool,
-  listNotifications: PropeTypes.arrayOf(NotificationItemShape)
-};
+    it('does not display div.Notifications when displayDrawer is false', () => {
+        const wrapper = shallow(<Notifications displayDrawer={ false } />);
+        expect(wrapper.find('.Notifications')).toHaveLength(0);
+    });
 
-export default Notifications;
+    it('does display the menuItem when displayDrawer is true', () => {
+        const wrapper = shallow(<Notifications displayDrawer={ true } />);
+        expect(wrapper.find('.menuItem')).toHaveLength(1);
+    });
+
+    it('does not display div.Notifications when displayDrawer is true', () => {
+        const wrapper = shallow(<Notifications displayDrawer={ true } />);
+        expect(wrapper.find('.Notifications')).toHaveLength(1);
+    });
+
+    it('renders an <Notifications /> component checking for 3 NotificationItems', () => {
+        const wrapper = shallow(<Notifications displayDrawer={ true } listNotifications={ listNotifications } />);
+        expect(wrapper.find('.Notifications ul NotificationItem')).toHaveLength(3);
+    });
+
+    it('verifies that the first NotificationItem element renders the html', () => {
+        const wrapper = shallow(<Notifications displayDrawer={ true } listNotifications={ listNotifications } />);
+        expect(wrapper.html()).toContain('<li data-notification-type="default">New course available</li>');
+    });
+
+    it('verifies that Notifications renders correctly if you pass an empty array or without the listNotifications prop', () => {
+        const wrapper = shallow(<Notifications displayDrawer={ true } />);
+        expect(wrapper.find('.Notifications')).toHaveLength(1);
+        const wrapperTwo = shallow(<Notifications displayDrawer={ true } listNotifications={ [] } />);
+        expect(wrapper.find('.Notifications')).toHaveLength(1);
+    });
+
+    it('verifies that when you pass a list of notifications, the component renders it correctly and with the right number of NotificationItem', () => {
+        const wrapper = shallow(<Notifications displayDrawer={ true } listNotifications={ listNotifications } />);
+        expect(wrapper.find(NotificationItem)).toHaveLength(3);
+    });
+
+    it('verifies that Notifications renders correctly if you pass an empty array or without the listNotifications prop', () => {
+        const wrapper = shallow(<Notifications displayDrawer={ true } />);
+        expect(wrapper.find('.Notifications p').text()).not.toEqual('Here is the list of notifications');
+        expect(wrapper.find('.Notifications p').text()).toEqual('No new notification for now');
+    });
+});
