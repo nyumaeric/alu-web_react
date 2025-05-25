@@ -1,3 +1,4 @@
+// In strict assertion mode, non - strict methods behave like their corresponding strict methods.For example, assert.deepEqual() will behave like assert.deepStrictEqual().
 import { strict as assert } from 'assert';
 import { getFullYear, getFooterCopy, getLatestNotification } from './utils';
 

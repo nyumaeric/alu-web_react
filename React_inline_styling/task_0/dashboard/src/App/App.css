@@ -1,9 +1,10 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  :root {
-    --holb-red: #FF0000;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* font-family: sans-serif; */
+}
+
+:root {
+  --holb-red: #FF0000;
+}

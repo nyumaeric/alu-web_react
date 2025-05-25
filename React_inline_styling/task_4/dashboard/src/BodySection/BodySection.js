@@ -1,5 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { StyleSheet, css } from 'aphrodite';
+
+const styles = StyleSheet.create({
+    /* bodySectionWithMarginBottom */
+
+    bodySection: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '24px 0px 0px',
+        width: '90%',
+        maxWidth: '600px',
+        margin: '0 auto',
+    },
+    bodySectionWithMargin: {
+        marginBottom: '40px',
+    },
+
+    centeredWithMargin: {
+        margin: '12px auto',
+    }
+});
 
 class BodySection extends React.Component {
     constructor(props) {
@@ -8,8 +31,8 @@ class BodySection extends React.Component {
 
     render() {
         return (
-            <div className="bodySection">
-                <h2>{this.props.title}</h2>
+            <div className={css(styles.bodySection)}>
+                <h2 className={css(styles.centeredWithMargin)}>{this.props.title}</h2>
                 {this.props.children}
             </div>
         )

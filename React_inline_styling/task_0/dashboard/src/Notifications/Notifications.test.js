@@ -40,7 +40,9 @@ describe('<Notifications />', () => {
 
     it('renders an <Notifications /> component checking for 3 NotificationItems', () => {
         const wrapper = shallow(<Notifications displayDrawer={ true } listNotifications={ listNotifications } />);
-        expect(wrapper.find('.Notifications ul NotificationItem')).toHaveLength(3);
+        console.log(wrapper.debug());
+
+        expect(wrapper.find('.Notifications ul Memo(NotificationItem)')).toHaveLength(3);
     });
 
     it('verifies that the first NotificationItem element renders the html', () => {
@@ -65,4 +67,15 @@ describe('<Notifications />', () => {
         expect(wrapper.find('.Notifications p').text()).not.toEqual('Here is the list of notifications');
         expect(wrapper.find('.Notifications p').text()).toEqual('No new notification for now');
     });
+
+    it('Verifies that when calling the function markAsRead on an instance of the component, the spy is being called with the right message', () => {
+        const wrapper = shallow(<Notifications displayDrawer={true}
+            listNotifications={listNotifications}/>);
+        // spy on the console object, its log method
+        const spy = jest.spyOn(console, 'log');
+        // an instance of the wrapper is able to directly use its methods
+        const instance = wrapper.instance();
+        instance.markAsRead(1);
+        expect(spy).toHaveBeenCalledWith('Notification 1 has been marked as read');
+    })
 });
